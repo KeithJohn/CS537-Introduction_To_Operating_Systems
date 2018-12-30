@@ -1,0 +1,172 @@
+==22734== Memcheck, a memory error detector
+==22734== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==22734== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==22734== Command: 537make
+==22734== 
+gcc -Wall -Wextra -c main.c
+gcc -Wall -Wextra -c linked_list.c
+gcc -Wall -Wextra -c text_parser.c
+gcc -Wall -Wextra -c build_specification.c
+gcc -Wall -Wextra -c build_specification_graph.c
+gcc -Wall -Wextra -c process_execution.c
+gcc -g -O0 -o 537make main.o linked_list.o text_parser.o build_specification.o build_specification_graph.o process_execution.o
+==22734== 
+==22734== HEAP SUMMARY:
+==22734==     in use at exit: 440,560 bytes in 1,103 blocks
+==22734==   total heap usage: 1,113 allocs, 10 frees, 454,712 bytes allocated
+==22734== 
+==22734== 96 bytes in 1 blocks are definitely lost in loss record 3 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x109899: parse_command (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A31D: executeCommand (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A1BD: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A24E: beginTraversal (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108D60: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 184 (24 direct, 160 indirect) bytes in 1 blocks are definitely lost in loss record 11 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1099BB: contains_dup_target (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CB3: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 288 bytes in 6 blocks are definitely lost in loss record 16 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x109899: parse_command (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A31D: executeCommand (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A1BD: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A15E: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A24E: beginTraversal (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108D60: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 384 (240 direct, 144 indirect) bytes in 10 blocks are definitely lost in loss record 20 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109EEA: isCyclic (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CF3: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 400 (240 direct, 160 indirect) bytes in 10 blocks are definitely lost in loss record 21 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109711: parse_rule (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109827: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 544 (240 direct, 304 indirect) bytes in 10 blocks are definitely lost in loss record 24 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109728: parse_rule (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109827: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 864 bytes in 6 blocks are definitely lost in loss record 25 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x109B2E: needToUpdate (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A17F: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A15E: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A24E: beginTraversal (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108D60: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 10,400 (160 direct, 10,240 indirect) bytes in 10 blocks are definitely lost in loss record 33 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x109104: split (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109391: is_valid_rule (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109450: invalid (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1095BD: read (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1097C6: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 10,400 (160 direct, 10,240 indirect) bytes in 10 blocks are definitely lost in loss record 34 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x109104: split (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1096FE: parse_rule (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109827: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 10,640 (240 direct, 10,400 indirect) bytes in 10 blocks are definitely lost in loss record 35 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1093A4: is_valid_rule (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109450: invalid (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1095BD: read (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1097C6: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 10,680 (24 direct, 10,656 indirect) bytes in 1 blocks are definitely lost in loss record 36 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1094F4: read (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1097C6: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 11,464 (24 direct, 11,440 indirect) bytes in 1 blocks are definitely lost in loss record 38 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109872: parse_command (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A31D: executeCommand (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A1BD: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A24E: beginTraversal (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108D60: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 31,344 (144 direct, 31,200 indirect) bytes in 6 blocks are definitely lost in loss record 42 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109872: parse_command (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A31D: executeCommand (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A1BD: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A15E: traverse (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A24E: beginTraversal (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108D60: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 48,000 (8 direct, 47,992 indirect) bytes in 1 blocks are definitely lost in loss record 43 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x10A0AA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 101,624 (744 direct, 100,880 indirect) bytes in 31 blocks are definitely lost in loss record 47 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10953E: read (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1097C6: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 101,624 (744 direct, 100,880 indirect) bytes in 31 blocks are definitely lost in loss record 48 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1093FC: invalid (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1095BD: read (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1097C6: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== 101,624 (744 direct, 100,880 indirect) bytes in 31 blocks are definitely lost in loss record 49 of 49
+==22734==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==22734==    by 0x108DB9: Init_list (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109196: get_words (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x109652: read (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x1097C6: makeBuildSpecs (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x10A0BA: createGraph (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734==    by 0x108CA0: main (in /afs/cs.wisc.edu/u/a/c/achenreiner/private/cs537/p3/537make)
+==22734== 
+==22734== LEAK SUMMARY:
+==22734==    definitely lost: 4,984 bytes in 176 blocks
+==22734==    indirectly lost: 435,576 bytes in 927 blocks
+==22734==      possibly lost: 0 bytes in 0 blocks
+==22734==    still reachable: 0 bytes in 0 blocks
+==22734==         suppressed: 0 bytes in 0 blocks
+==22734== 
+==22734== For counts of detected and suppressed errors, rerun with: -v
+==22734== ERROR SUMMARY: 17 errors from 17 contexts (suppressed: 0 from 0)

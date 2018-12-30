@@ -1,0 +1,60 @@
+diff --git a/check_proc.c b/check_proc.c
+index 38c6be3..dd0a330 100644
+--- a/check_proc.c
++++ b/check_proc.c
+@@ -92,7 +92,10 @@ int get_uid_of_pid(char *pid){
+         }
+         break;
+     }
+-    
++    if (line_count <= needed_line){
++        printf("Error getting uid");
++        exit(1);
++    }
+     if (fclose(status_file) == EOF){
+         printf("Error closing file");
+         exit(1);
+diff --git a/makefile b/makefile
+index b8b45a4..d4b8de5 100644
+--- a/makefile
++++ b/makefile
+@@ -1,6 +1,7 @@
+ CC = gcc
+ WARNING_FLAGS = -Wall -Wextra
+ EXE = 537ps
++SCAN_BUILD_DIR = scan-build-out
+ 
+ all: main.o options_processing.o process_processing.o check_proc.o cmdln_parser.o statm_parser.o stat_parser.o
+ 	$(CC) -o $(EXE) main.o options_processing.o process_processing.o check_proc.o cmdln_parser.o statm_parser.o stat_parser.o
+@@ -24,5 +25,17 @@ statm_parser.o: statm_parser.c statm_parser.h
+ 	$(CC) $(WARNING_FLAGS) -c statm_parser.c
+ 
+ clean:
+-	rm *.o
++	rm -f *.o
++	rm -rf $(SCAN_BUILD_DIR)
+ 
++#
++# Run the Clang Static Analyzer
++#
++scan-build: clean
++	scan-build -o $(SCAN_BUILD_DIR) make
++
++#
++# View the one scan available using firefox
++#
++scan-view: scan-build
++	firefox -new-window $(SCAN_BUILD_DIR)/*/index.html  
+diff --git a/process_processing.c b/process_processing.c
+index 2789262..ed4dfa2 100644
+--- a/process_processing.c
++++ b/process_processing.c
+@@ -74,7 +74,7 @@ process_info * get_process_list(){
+     process_info *process_list = malloc(sizeof(process_info) * num_processes);
+     int cur_index = 0;
+     // Loop through directory and get the process for each directory.
+-    while ((sd = readdir(dir)) != 0){
++    while ((sd = readdir(dir)) != 0 && cur_index < num_processes){
+         char *pid = sd->d_name;
+         if(is_valid_pid(pid)){
+             process_info process = get_process(pid);

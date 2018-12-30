@@ -1,0 +1,270 @@
+[1mdiff --git a/537make b/537make[m
+[1mindex 69e1353..2ef5afd 100755[m
+Binary files a/537make and b/537make differ
+[1mdiff --git a/build_specification.c b/build_specification.c[m
+[1mindex 826a802..a73d1a0 100644[m
+[1m--- a/build_specification.c[m
+[1m+++ b/build_specification.c[m
+[36m@@ -56,9 +56,11 @@[m [mint needToUpdate(BuildSpecification* buildSpec){[m
+     targetBuffer = malloc(sizeof(struct stat));[m
+     time_t targetModTime;[m
+     if(stat(buildSpec->target, targetBuffer) == -1){[m
+[32m+[m[32m        free(targetBuffer);[m
+         return 1;[m
+     }else{[m
+         targetModTime = targetBuffer->st_mtime;[m
+[32m+[m[32m        free(targetBuffer);[m
+     }[m
+ [m
+     struct stat *buffer;[m
+[36m@@ -71,14 +73,12 @@[m [mint needToUpdate(BuildSpecification* buildSpec){[m
+             modTime = buffer->st_mtime;[m
+         [m
+             if(modTime > targetModTime){[m
+[31m-                free(targetBuffer);[m
+                 free(buffer);[m
+                 return 1;[m
+             }[m
+         }[m
+         count++;[m
+     }[m
+[31m-    free(targetBuffer);[m
+     free(buffer);[m
+     return 0;[m
+ }[m
+[1mdiff --git a/build_specification_graph.c b/build_specification_graph.c[m
+[1mindex 04f41e9..68b25d3 100644[m
+[1m--- a/build_specification_graph.c[m
+[1m+++ b/build_specification_graph.c[m
+[36m@@ -92,6 +92,7 @@[m [mchar* isCyclic(BuildSpecificationGraph* graph){[m
+                 return currNode->target;[m
+             }[m
+         }[m
+[32m+[m[32m        Free_list(visited, 0);[m
+     }[m
+     return NULL;[m
+ }[m
+[1mdiff --git a/linked_list.c b/linked_list.c[m
+[1mindex 3df9546..7644b9c 100644[m
+[1m--- a/linked_list.c[m
+[1m+++ b/linked_list.c[m
+[36m@@ -32,6 +32,17 @@[m [mList *Init_list(){[m
+     return newList;[m
+ }[m
+ [m
+[32m+[m[32mvoid Free_list(List* aList, int clear){[m
+[32m+[m[32m    Node *start = aList->head;[m
+[32m+[m[32m    while(start != NULL){[m
+[32m+[m[32m        Node *next = start->next;[m
+[32m+[m[32m        if(clear) free(start->element);[m
+[32m+[m[32m        free(start);[m
+[32m+[m
+[32m+[m[32m        start = next;[m
+[32m+[m[32m    }[m
+[32m+[m[32m    free(aList);[m
+[32m+[m[32m}[m
+ [m
+ void Append(List *aList, void *item){[m
+     Node *newNode = malloc(sizeof(Node));[m
+[1mdiff --git a/linked_list.h b/linked_list.h[m
+[1mindex 4e01e78..c1d2095 100644[m
+[1m--- a/linked_list.h[m
+[1m+++ b/linked_list.h[m
+[36m@@ -31,4 +31,5 @@[m [mvoid *Get(List *aList, int index);[m
+ int Contains(List *aList, void *item);[m
+ int Size(List *aList);[m
+ void checkMalloc(void* mem);[m
+[32m+[m[32mvoid Free_list(List* aList, int clear);[m
+ #endif[m
+[1mdiff --git a/makefile b/makefile[m
+[1mindex c91cb94..c3cb5fe 100644[m
+[1m--- a/makefile[m
+[1m+++ b/makefile[m
+[36m@@ -1,19 +1,19 @@[m
+ 537make: main.o linked_list.o text_parser.o build_specification.o build_specification_graph.o process_execution.o[m
+[31m-	gcc -o 537make main.o linked_list.o text_parser.o build_specification.o build_specification_graph.o process_execution.o[m
+[32m+[m	[32mgcc -g -O0 -o 537make main.o linked_list.o text_parser.o build_specification.o build_specification_graph.o process_execution.o[m
+ [m
+ main.o:main.c[m
+[31m-	gcc -Wall -Wextra -c main.c[m
+[32m+[m	[32mgcc -g -O0 -Wall -Wextra -c main.c[m
+ linked_list.o: linked_list.c linked_list.h[m
+[31m-	gcc -Wall -Wextra -c linked_list.c[m
+[32m+[m	[32mgcc -g -O0 -Wall -Wextra -c linked_list.c[m
+ [m
+ text_parser.o: text_parser.c text_parser.h[m
+[31m-	gcc -Wall -Wextra -c text_parser.c[m
+[32m+[m	[32mgcc -g -O0 -Wall -Wextra -c text_parser.c[m
+ build_specification.o: build_specification.c build_specification.h[m
+[31m-	gcc -Wall -Wextra -c build_specification.c[m
+[32m+[m	[32mgcc -g -O0 -Wall -Wextra -c build_specification.c[m
+ build_specification_graph.o: build_specification_graph.c build_specification_graph.h[m
+[31m-	gcc -Wall -Wextra -c build_specification_graph.c[m
+[32m+[m	[32mgcc -g -O0 -Wall -Wextra -c build_specification_graph.c[m
+ process_execution.o: process_execution.c process_execution.h[m
+[31m-	gcc -Wall -Wextra -c process_execution.c[m
+[32m+[m	[32mgcc -g -O0 -Wall -Wextra -c process_execution.c[m
+ clean:[m
+ 	rm -f main.o[m
+ 	rm -f linked_list.o[m
+[1mdiff --git a/process_execution.c b/process_execution.c[m
+[1mindex 1ed2ede..575e38b 100644[m
+[1m--- a/process_execution.c[m
+[1m+++ b/process_execution.c[m
+[36m@@ -21,7 +21,8 @@[m
+ [m
+ // Return 0 on success[m
+ int executeCommand(char* command){[m
+[31m-    char** argv = parse_command(command);[m
+[32m+[m[32m    List *parts = get_words(command);[m
+[32m+[m[32m    char** argv = parse_command(parts);[m
+     pid_t child_pid;[m
+     int child_status;[m
+ [m
+[36m@@ -38,6 +39,8 @@[m [mint executeCommand(char* command){[m
+     }else if (child_pid > 0){[m
+         //parent[m
+         while(wait(&child_status) != child_pid);[m
+[32m+[m[32m        Free_list(parts, 1);[m
+[32m+[m[32m        free(argv);[m
+ [m
+     }else{[m
+         fprintf(stderr, "Fork error\n");[m
+[1mdiff --git a/text_parser.c b/text_parser.c[m
+[1mindex bc31340..80438ff 100644[m
+[1m--- a/text_parser.c[m
+[1m+++ b/text_parser.c[m
+[36m@@ -111,6 +111,9 @@[m [mList* get_words(char* line){[m
+         if(newWord[0] != '\0'){[m
+             Append(words, newWord);[m
+         }[m
+[32m+[m[32m        else{[m
+[32m+[m[32m            free(newWord);[m
+[32m+[m[32m        }[m
+     }[m
+     return words;[m
+ }[m
+[36m@@ -130,8 +133,15 @@[m [mint is_valid_rule(char* line){[m
+ [m
+     char **halves = split(line, ':');[m
+     List* targets = get_words(halves[0]);[m
+[31m-    if(Size(targets) != 1) return 0;[m
+[31m-    return line[0] != '\t' && line[0] != ' ';[m
+[32m+[m[32m    int ans = Size(targets) == 1 &&[m
+[32m+[m[32m              line[0] != '\t' &&[m
+[32m+[m[32m              line[0] != ' ';[m
+[32m+[m
+[32m+[m[32m    Free_list(targets, 1);[m
+[32m+[m[32m    free(halves[0]);[m
+[32m+[m[32m    free(halves);[m
+[32m+[m
+[32m+[m[32m    return ans;[m
+ }[m
+ [m
+ int invalid(char* str){[m
+[36m@@ -140,19 +150,16 @@[m [mint invalid(char* str){[m
+     List *words = get_words(str);[m
+ [m
+     // Valid blank line[m
+[31m-    if (Size(words) == 0 && str[0] != '\t'){[m
+[31m-        return 0;[m
+[31m-    }[m
+[31m-    // Valid Command[m
+[31m-    else if (Size(words) != 0 && str[0] == '\t'){[m
+[31m-        return 0;[m
+[31m-    }    [m
+[31m-    // Valid Rule[m
+[31m-    else if(is_valid_rule(str)){[m
+[32m+[m[32m    if ((Size(words) == 0 && str[0] != '\t') || // Valid blank[m
+[32m+[m[32m        (Size(words) != 0 && str[0] == '\t') || // Valid cmd[m
+[32m+[m[32m        is_valid_rule(str)){ // Valid rule[m
+[32m+[m
+[32m+[m[32m        Free_list(words, 1);[m
+         return 0;[m
+     }[m
+     // Invalid[m
+     else{[m
+[32m+[m[32m        Free_list(words, 1);[m
+         return 1;[m
+     }[m
+ }[m
+[36m@@ -196,12 +203,13 @@[m [mList* read(char* fileName){[m
+             exit(1);[m
+         }[m
+ [m
+[31m-        if(Size(get_words(str)) > 0){[m
+[32m+[m[32m        if(Size(words) > 0){[m
+             Append(line_list, str);[m
+         }else{[m
+             free(str);[m
+             str = NULL;[m
+         } [m
+[32m+[m[32m        Free_list(words, 1);[m
+         lineNum++;[m
+         done = (c == EOF);[m
+     }[m
+[36m@@ -221,15 +229,20 @@[m [mBuildSpecification* parse_rule(char* rule){[m
+     List *targets = get_words(halves[0]);[m
+     List *words = get_words(halves[1]);[m
+     char *target = Get(targets, 0);[m
+[32m+[m[41m    [m
+[32m+[m[32m    free(halves[0]);[m
+[32m+[m[32m    free(halves);[m
+ [m
+     BuildSpecification *newBuildSpec = createBuildSpecification();[m
+     addTarget(newBuildSpec, target);[m
+[31m-    [m
+[32m+[m[32m    Free_list(targets, 0);[m
+[32m+[m[41m [m
+     //loop to add dependencies[m
+     for (int i = 0; i < Size(words); i++){[m
+         char *dependency = Get(words, i);[m
+         addDependency(newBuildSpec, dependency);[m
+     }[m
+[32m+[m[32m    Free_list(words, 0);[m
+ [m
+     return newBuildSpec;[m
+ }[m
+[36m@@ -246,15 +259,16 @@[m [mList* makeBuildSpecs(char *fileName){[m
+         }[m
+         else{[m
+             curBuildSpec = parse_rule(curLine);[m
+[32m+[m[32m            free(curLine);[m
+             Append(allBuildSpecs, curBuildSpec);[m
+         }[m
+         [m
+     }[m
+[32m+[m[32m    Free_list(lines, 0);[m
+     return allBuildSpecs;[m
+ }[m
+ [m
+[31m-char** parse_command(char *cmd){[m
+[31m-    List *args = get_words(cmd);[m
+[32m+[m[32mchar** parse_command(List *args){[m
+     int argc = Size(args);[m
+     char **argv = malloc(sizeof(char*) *(argc+1));[m
+     checkMalloc(argv);[m
+[36m@@ -287,7 +301,9 @@[m [mchar* contains_dup_target(List *buildSpecs){[m
+         char *curTarget = curSpec->target;[m
+         Append(targets, curTarget);[m
+     }[m
+[31m-    return contains_dup_str(targets);[m
+[32m+[m[32m    char *ans = contains_dup_str(targets);[m
+[32m+[m[32m    Free_list(targets, 0);[m
+[32m+[m[32m    return ans;[m
+ }[m
+ //int main(int argc, char* argv[]){[m
+ //    printf("%i\n", argc);[m
+[1mdiff --git a/text_parser.h b/text_parser.h[m
+[1mindex a8a9040..1170940 100644[m
+[1m--- a/text_parser.h[m
+[1m+++ b/text_parser.h[m
+[36m@@ -16,7 +16,7 @@[m
+ [m
+ List* makeBuildSpecs(char *fileName);[m
+ List* get_words(char* line);[m
+[31m-char** parse_command(char* cmd);[m
+[32m+[m[32mchar** parse_command(List* cmd);[m
+ [m
+ // Takes a list of char*[m
+ char* contains_dup_str(List* list);[m

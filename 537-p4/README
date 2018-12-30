@@ -1,0 +1,9 @@
+This program was created by Keith Ecker and Andy Achenreiner for CS537. This 
+program recreates the malloc, free, and realloc functions to check for basic 
+invalid inputs. We also created a function named memcheck which takes a void 
+pointer and a size_t and checks whether this memory is contained within a block 
+of memory that was allocated using our functions. We use a AVL tree to track 
+all memory allocated, freed, and reallocted using our functions. 12/6/2018
+
+Note that the file containing main can be set for the main variable in the
+makefile.

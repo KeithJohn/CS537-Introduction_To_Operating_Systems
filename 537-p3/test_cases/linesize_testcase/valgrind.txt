@@ -1,0 +1,22 @@
+==8663== Memcheck, a memory error detector
+==8663== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==8663== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==8663== Command: 537make
+==8663== 
+1: Invalid line : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa:"
+==8663== 
+==8663== HEAP SUMMARY:
+==8663==     in use at exit: 2,672 bytes in 7 blocks
+==8663==   total heap usage: 8 allocs, 1 frees, 6,768 bytes allocated
+==8663== 
+==8663== LEAK SUMMARY:
+==8663==    definitely lost: 0 bytes in 0 blocks
+==8663==    indirectly lost: 0 bytes in 0 blocks
+==8663==      possibly lost: 0 bytes in 0 blocks
+==8663==    still reachable: 2,672 bytes in 7 blocks
+==8663==         suppressed: 0 bytes in 0 blocks
+==8663== Reachable blocks (those to which a pointer was found) are not shown.
+==8663== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==8663== 
+==8663== For counts of detected and suppressed errors, rerun with: -v
+==8663== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

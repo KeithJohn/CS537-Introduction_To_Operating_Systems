@@ -1,0 +1,270 @@
+diff --git a/537make b/537make
+index 69e1353..2ef5afd 100755
+Binary files a/537make and b/537make differ
+diff --git a/build_specification.c b/build_specification.c
+index 826a802..a73d1a0 100644
+--- a/build_specification.c
++++ b/build_specification.c
+@@ -56,9 +56,11 @@ int needToUpdate(BuildSpecification* buildSpec){
+     targetBuffer = malloc(sizeof(struct stat));
+     time_t targetModTime;
+     if(stat(buildSpec->target, targetBuffer) == -1){
++        free(targetBuffer);
+         return 1;
+     }else{
+         targetModTime = targetBuffer->st_mtime;
++        free(targetBuffer);
+     }
+ 
+     struct stat *buffer;
+@@ -71,14 +73,12 @@ int needToUpdate(BuildSpecification* buildSpec){
+             modTime = buffer->st_mtime;
+         
+             if(modTime > targetModTime){
+-                free(targetBuffer);
+                 free(buffer);
+                 return 1;
+             }
+         }
+         count++;
+     }
+-    free(targetBuffer);
+     free(buffer);
+     return 0;
+ }
+diff --git a/build_specification_graph.c b/build_specification_graph.c
+index 04f41e9..68b25d3 100644
+--- a/build_specification_graph.c
++++ b/build_specification_graph.c
+@@ -92,6 +92,7 @@ char* isCyclic(BuildSpecificationGraph* graph){
+                 return currNode->target;
+             }
+         }
++        Free_list(visited, 0);
+     }
+     return NULL;
+ }
+diff --git a/linked_list.c b/linked_list.c
+index 3df9546..7644b9c 100644
+--- a/linked_list.c
++++ b/linked_list.c
+@@ -32,6 +32,17 @@ List *Init_list(){
+     return newList;
+ }
+ 
++void Free_list(List* aList, int clear){
++    Node *start = aList->head;
++    while(start != NULL){
++        Node *next = start->next;
++        if(clear) free(start->element);
++        free(start);
++
++        start = next;
++    }
++    free(aList);
++}
+ 
+ void Append(List *aList, void *item){
+     Node *newNode = malloc(sizeof(Node));
+diff --git a/linked_list.h b/linked_list.h
+index 4e01e78..c1d2095 100644
+--- a/linked_list.h
++++ b/linked_list.h
+@@ -31,4 +31,5 @@ void *Get(List *aList, int index);
+ int Contains(List *aList, void *item);
+ int Size(List *aList);
+ void checkMalloc(void* mem);
++void Free_list(List* aList, int clear);
+ #endif
+diff --git a/makefile b/makefile
+index c91cb94..c3cb5fe 100644
+--- a/makefile
++++ b/makefile
+@@ -1,19 +1,19 @@
+ 537make: main.o linked_list.o text_parser.o build_specification.o build_specification_graph.o process_execution.o
+-	gcc -o 537make main.o linked_list.o text_parser.o build_specification.o build_specification_graph.o process_execution.o
++	gcc -g -O0 -o 537make main.o linked_list.o text_parser.o build_specification.o build_specification_graph.o process_execution.o
+ 
+ main.o:main.c
+-	gcc -Wall -Wextra -c main.c
++	gcc -g -O0 -Wall -Wextra -c main.c
+ linked_list.o: linked_list.c linked_list.h
+-	gcc -Wall -Wextra -c linked_list.c
++	gcc -g -O0 -Wall -Wextra -c linked_list.c
+ 
+ text_parser.o: text_parser.c text_parser.h
+-	gcc -Wall -Wextra -c text_parser.c
++	gcc -g -O0 -Wall -Wextra -c text_parser.c
+ build_specification.o: build_specification.c build_specification.h
+-	gcc -Wall -Wextra -c build_specification.c
++	gcc -g -O0 -Wall -Wextra -c build_specification.c
+ build_specification_graph.o: build_specification_graph.c build_specification_graph.h
+-	gcc -Wall -Wextra -c build_specification_graph.c
++	gcc -g -O0 -Wall -Wextra -c build_specification_graph.c
+ process_execution.o: process_execution.c process_execution.h
+-	gcc -Wall -Wextra -c process_execution.c
++	gcc -g -O0 -Wall -Wextra -c process_execution.c
+ clean:
+ 	rm -f main.o
+ 	rm -f linked_list.o
+diff --git a/process_execution.c b/process_execution.c
+index 1ed2ede..575e38b 100644
+--- a/process_execution.c
++++ b/process_execution.c
+@@ -21,7 +21,8 @@
+ 
+ // Return 0 on success
+ int executeCommand(char* command){
+-    char** argv = parse_command(command);
++    List *parts = get_words(command);
++    char** argv = parse_command(parts);
+     pid_t child_pid;
+     int child_status;
+ 
+@@ -38,6 +39,8 @@ int executeCommand(char* command){
+     }else if (child_pid > 0){
+         //parent
+         while(wait(&child_status) != child_pid);
++        Free_list(parts, 1);
++        free(argv);
+ 
+     }else{
+         fprintf(stderr, "Fork error\n");
+diff --git a/text_parser.c b/text_parser.c
+index bc31340..80438ff 100644
+--- a/text_parser.c
++++ b/text_parser.c
+@@ -111,6 +111,9 @@ List* get_words(char* line){
+         if(newWord[0] != '\0'){
+             Append(words, newWord);
+         }
++        else{
++            free(newWord);
++        }
+     }
+     return words;
+ }
+@@ -130,8 +133,15 @@ int is_valid_rule(char* line){
+ 
+     char **halves = split(line, ':');
+     List* targets = get_words(halves[0]);
+-    if(Size(targets) != 1) return 0;
+-    return line[0] != '\t' && line[0] != ' ';
++    int ans = Size(targets) == 1 &&
++              line[0] != '\t' &&
++              line[0] != ' ';
++
++    Free_list(targets, 1);
++    free(halves[0]);
++    free(halves);
++
++    return ans;
+ }
+ 
+ int invalid(char* str){
+@@ -140,19 +150,16 @@ int invalid(char* str){
+     List *words = get_words(str);
+ 
+     // Valid blank line
+-    if (Size(words) == 0 && str[0] != '\t'){
+-        return 0;
+-    }
+-    // Valid Command
+-    else if (Size(words) != 0 && str[0] == '\t'){
+-        return 0;
+-    }    
+-    // Valid Rule
+-    else if(is_valid_rule(str)){
++    if ((Size(words) == 0 && str[0] != '\t') || // Valid blank
++        (Size(words) != 0 && str[0] == '\t') || // Valid cmd
++        is_valid_rule(str)){ // Valid rule
++
++        Free_list(words, 1);
+         return 0;
+     }
+     // Invalid
+     else{
++        Free_list(words, 1);
+         return 1;
+     }
+ }
+@@ -196,12 +203,13 @@ List* read(char* fileName){
+             exit(1);
+         }
+ 
+-        if(Size(get_words(str)) > 0){
++        if(Size(words) > 0){
+             Append(line_list, str);
+         }else{
+             free(str);
+             str = NULL;
+         } 
++        Free_list(words, 1);
+         lineNum++;
+         done = (c == EOF);
+     }
+@@ -221,15 +229,20 @@ BuildSpecification* parse_rule(char* rule){
+     List *targets = get_words(halves[0]);
+     List *words = get_words(halves[1]);
+     char *target = Get(targets, 0);
++    
++    free(halves[0]);
++    free(halves);
+ 
+     BuildSpecification *newBuildSpec = createBuildSpecification();
+     addTarget(newBuildSpec, target);
+-    
++    Free_list(targets, 0);
++ 
+     //loop to add dependencies
+     for (int i = 0; i < Size(words); i++){
+         char *dependency = Get(words, i);
+         addDependency(newBuildSpec, dependency);
+     }
++    Free_list(words, 0);
+ 
+     return newBuildSpec;
+ }
+@@ -246,15 +259,16 @@ List* makeBuildSpecs(char *fileName){
+         }
+         else{
+             curBuildSpec = parse_rule(curLine);
++            free(curLine);
+             Append(allBuildSpecs, curBuildSpec);
+         }
+         
+     }
++    Free_list(lines, 0);
+     return allBuildSpecs;
+ }
+ 
+-char** parse_command(char *cmd){
+-    List *args = get_words(cmd);
++char** parse_command(List *args){
+     int argc = Size(args);
+     char **argv = malloc(sizeof(char*) *(argc+1));
+     checkMalloc(argv);
+@@ -287,7 +301,9 @@ char* contains_dup_target(List *buildSpecs){
+         char *curTarget = curSpec->target;
+         Append(targets, curTarget);
+     }
+-    return contains_dup_str(targets);
++    char *ans = contains_dup_str(targets);
++    Free_list(targets, 0);
++    return ans;
+ }
+ //int main(int argc, char* argv[]){
+ //    printf("%i\n", argc);
+diff --git a/text_parser.h b/text_parser.h
+index a8a9040..1170940 100644
+--- a/text_parser.h
++++ b/text_parser.h
+@@ -16,7 +16,7 @@
+ 
+ List* makeBuildSpecs(char *fileName);
+ List* get_words(char* line);
+-char** parse_command(char* cmd);
++char** parse_command(List* cmd);
+ 
+ // Takes a list of char*
+ char* contains_dup_str(List* list);
